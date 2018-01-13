@@ -15,6 +15,7 @@
  */
 package com.example.android.sunshine;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,15 +45,11 @@ public class MainActivity extends AppCompatActivity implements
         LoaderCallbacks<String[]> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
+    private static final int FORECAST_LOADER_ID = 0;
     private RecyclerView mRecyclerView;
     private ForecastAdapter mForecastAdapter;
-
     private TextView mErrorMessageDisplay;
-
     private ProgressBar mLoadingIndicator;
-
-    private static final int FORECAST_LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -346,12 +343,24 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
 
-        // TODO (1) Add new Activity called SettingsActivity using Android Studio wizard
-        // Do step 2 in SettingsActivity
-        // TODO (2) Set setDisplayHomeAsUpEnabled to true on the support ActionBar
+        if (id == R.id.action_settings) {
+            openSettingsActivity(SettingsActivity.class);
+            return true;
+        }
 
-        // TODO (6) Launch SettingsActivity when the Settings option is clicked
+        // COMPLETE (1) Add new Activity called SettingsActivity using Android Studio wizard
+        // Do step 2 in SettingsActivity
+        // COMPLETE (2) Set setDisplayHomeAsUpEnabled to true on the support ActionBar
+
+        // COMPLETE (6) Launch SettingsActivity when the Settings option is clicked
+
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettingsActivity(Class settingsActivity) {
+        Context context = this;
+        Intent settingsIntent = new Intent(context, settingsActivity);
+        startActivity(settingsIntent);
     }
 }

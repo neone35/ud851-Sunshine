@@ -1,5 +1,6 @@
 package com.example.android.sunshine;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
@@ -30,6 +31,8 @@ public class DetailActivity extends AppCompatActivity {
                 mWeatherDisplay.setText(mForecast);
             }
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -55,5 +58,23 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
-    // TODO (7) Launch SettingsActivity when the Settings option is clicked
+    // COMPLETE (7) Launch SettingsActivity when the Settings option is clicked
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_settings:
+                openSettingsActivity(SettingsActivity.class);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openSettingsActivity(Class settingsActivity) {
+        Context context = this;
+        Intent settingsIntent = new Intent(context, settingsActivity);
+        startActivity(settingsIntent);
+    }
 }
