@@ -16,8 +16,14 @@
 package com.example.android.sunshine.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
-public class SunshinePreferences {
+import com.example.android.sunshine.R;
+
+public abstract class SunshinePreferences {
 
     /*
      * Human readable location string, provided by the API.  Because for styling,
@@ -87,9 +93,14 @@ public class SunshinePreferences {
      * "94043,USA" if SharedPreferences have not been implemented yet.
      */
     public static String getPreferredWeatherLocation(Context context) {
-        // TODO (1) Return the user's preferred location
+        // COMPLETE (1) Return the user's preferred location
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String pLocationKey = context.getString(R.string.pref_location_key);
+        String pLocationDefault = context.getString(R.string.pref_location_default);
+        String addressString = sharedPreferences.getString(pLocationKey, pLocationDefault);
+
         /** This will be implemented in a future lesson **/
-        return getDefaultWeatherLocation();
+        return addressString;
     }
 
     /**
@@ -100,9 +111,13 @@ public class SunshinePreferences {
      * @return true If metric display should be used
      */
     public static boolean isMetric(Context context) {
-        // TODO (2) Return true if the user's preference for units is metric, false otherwise
-        /** This will be implemented in a future lesson **/
-        return true;
+        // COMPLETE (2) Return true if the user's preference for units is metric, false otherwise
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String pUnitsKey = context.getString(R.string.pref_units_key);
+        String pUnitsDefault = context.getString(R.string.pref_units_metric);
+        String unitsCurrent = sharedPreferences.getString(pUnitsKey, pUnitsDefault);
+
+        return unitsCurrent.equals(pUnitsDefault);
     }
 
     /**
@@ -138,4 +153,5 @@ public class SunshinePreferences {
         /** This will be implemented in a future lesson **/
         return DEFAULT_WEATHER_COORDINATES;
     }
+
 }
