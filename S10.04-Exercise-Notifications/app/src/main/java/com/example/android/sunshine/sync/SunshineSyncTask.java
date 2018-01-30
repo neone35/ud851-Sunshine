@@ -18,9 +18,14 @@ package com.example.android.sunshine.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.example.android.sunshine.R;
+import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.NotificationUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
@@ -73,11 +78,22 @@ public class SunshineSyncTask {
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         weatherValues);
 
-//              TODO (13) Check if notifications are enabled
+//              COMPLETE (13) Check if notifications are enabled
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                String notificationsKey = context.getString(R.string.pref_notifications_key);
+                boolean notificationValue = context.getResources().getBoolean(R.bool.showNotificationsDefault);
+                boolean notificationCheckBoxCurrent = sharedPreferences.getBoolean(notificationsKey, notificationValue);
+                long timeSinceLastNotification = SunshinePreferences.getLastNotificationTimeInMillis(context);
+                long millisInDay = 86400000;
+                long daySinceLastNotification = System.currentTimeMillis() - timeSinceLastNotification;
 
-//              TODO (14) Check if a day has passed since the last notification
+                if (daySinceLastNotification >= millisInDay && notificationCheckBoxCurrent) {
+                    NotificationUtils.notifyUserOfNewWeather(context);
+                }
 
-//              TODO (15) If more than a day have passed and notifications are enabled, notify the user
+//              COMPLETE (14) Check if a day has passed since the last notification
+
+//              COMPLETE (15) If more than a day have passed and notifications are enabled, notify the user
 
             /* If the code reaches this point, we have successfully performed our sync */
 
