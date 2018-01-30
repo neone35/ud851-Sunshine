@@ -1,4 +1,4 @@
-/*
+package com.example.android.sunshine.sync;/*
  * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// TODO (2) Make sure you've imported the jobdispatcher.JobService, not job.JobService
+// COMPLETE (2) Make sure you've imported the jobdispatcher.JobService, not job.JobService
 
-// TODO (3) Add a class called SunshineFirebaseJobService that extends jobdispatcher.JobService
+// COMPLETE (3) Add a class called SunshineFirebaseJobService that extends jobdispatcher.JobService
 
-//  TODO (4) Declare an ASyncTask field called mFetchWeatherTask
+//  COMPLETE (4) Declare an ASyncTask field called mFetchWeatherTask
 
-//  TODO (5) Override onStartJob and within it, spawn off a separate ASyncTask to sync weather data
-//              TODO (6) Once the weather data is sync'd, call jobFinished with the appropriate arguments
+//  COMPLETE (5) Override onStartJob and within it, spawn off a separate ASyncTask to sync weather data
+//              COMPLETE (6) Once the weather data is sync'd, call jobFinished with the appropriate arguments
 
-//  TODO (7) Override onStopJob, cancel the ASyncTask if it's not null and return true
+//  COMPLETE (7) Override onStopJob, cancel the ASyncTask if it's not null and return true
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.AsyncTask;
+
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
+
+public class SunshineFirebaseJobService extends JobService {
+
+    AsyncTask mFetchWeatherTask;
+
+    @SuppressLint("StaticFieldLeak")
+    @Override
+    public boolean onStartJob(final JobParameters job) {
+        mFetchWeatherTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Context context = getApplicationContext();
+                SunshineSyncTask.syncWeather(context);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                //  COMPLETED (6) Once the weather data is sync'd, call jobFinished with the appropriate arguements
+                jobFinished(job, false);
+            }
+        };
+
+        mFetchWeatherTask.execute();
+        return true;
+        // Answers the question: "Is there still work going on?"
+    }
+
+    @Override
+    public boolean onStopJob(JobParameters job) {
+        if (mFetchWeatherTask != null) {
+            mFetchWeatherTask.cancel(true);
+        }
+        return false; // Answers the question: "Should this job be retried?"
+    }
+}
