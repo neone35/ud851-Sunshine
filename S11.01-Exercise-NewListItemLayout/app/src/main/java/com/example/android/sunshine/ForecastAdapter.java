@@ -17,15 +17,20 @@ package com.example.android.sunshine;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
+
+import java.text.DecimalFormat;
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
@@ -43,13 +48,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * an item is clicked in the list.
      */
     final private ForecastAdapterOnClickHandler mClickHandler;
-
-    /**
-     * The interface that receives onClick messages.
-     */
-    public interface ForecastAdapterOnClickHandler {
-        void onClick(long date);
-    }
+    private Cursor mCursor;
 
     /*
      * Flag to determine if we want to use a separate view for the list item that represents
@@ -57,8 +56,6 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * is in landscape. This flag will be set in the constructor of the adapter by accessing
      * boolean resources.
      */
-
-    private Cursor mCursor;
 
     /**
      * Creates a ForecastAdapter.
@@ -107,7 +104,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public void onBindViewHolder(ForecastAdapterViewHolder forecastAdapterViewHolder, int position) {
         mCursor.moveToPosition(position);
 
-//      TODO (7) Replace the single TextView with Views to display all of the weather info
+//      COMPLETE (7) Replace the single TextView with Views to display all of the weather info
 
         /*******************
          * Weather Summary *
@@ -119,17 +116,27 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
          /* Use the weatherId to obtain the proper description */
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
-         /* Read high temperature from the cursor (in degrees celsius) */
+
         double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
-         /* Read low temperature from the cursor (in degrees celsius) */
         double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
 
-        String highAndLowTemperature =
-                SunshineWeatherUtils.formatHighLows(mContext, highInCelsius, lowInCelsius);
+        Drawable weatherIcon = null;
+        if (description == mContext.getString(R.string.condition_800)) {
+            weatherIcon = mContext.getResources().getDrawable(R.drawable.art_clear);
+        } else {
+            weatherIcon = mContext.getResources().getDrawable(R.drawable.art_fog);
+        }
 
-        String weatherSummary = dateString + " - " + description + " - " + highAndLowTemperature;
+        DecimalFormat df = new DecimalFormat("#");
+        final String DEGREE = "\u00b0";
+        String lowTempFormatted = String.valueOf(df.format(lowInCelsius)) + DEGREE;
+        String highTempFormatted = String.valueOf(df.format(highInCelsius)) + DEGREE;
+        forecastAdapterViewHolder.weatherLow.setText(lowTempFormatted);
+        forecastAdapterViewHolder.weatherHigh.setText(highTempFormatted);
+        forecastAdapterViewHolder.weatherForecast.setText(description);
+        forecastAdapterViewHolder.weatherDay.setText(dateString);
+        forecastAdapterViewHolder.weatherIcon.setImageDrawable(weatherIcon);
 
-        forecastAdapterViewHolder.weatherSummary.setText(weatherSummary);
     }
 
     /**
@@ -158,21 +165,36 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     }
 
     /**
+     * The interface that receives onClick messages.
+     */
+    public interface ForecastAdapterOnClickHandler {
+        void onClick(long date);
+    }
+
+    /**
      * A ViewHolder is a required part of the pattern for RecyclerViews. It mostly behaves as
      * a cache of the child views for a forecast item. It's also a convenient place to set an
      * OnClickListener, since it has access to the adapter and the views.
      */
     class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//      TODO (4) Replace the weatherSummary TextView with individual weather detail TextViews
-        final TextView weatherSummary;
+        //      COMPLETE (4) Replace the weatherSummary TextView with individual weather detail TextViews
+        final TextView weatherLow;
+        final TextView weatherHigh;
+        final TextView weatherDay;
+        final TextView weatherForecast;
 
-//      TODO (5) Add an ImageView for the weather icon
+        //      COMPLETE (5) Add an ImageView for the weather icon
+        final ImageView weatherIcon;
 
         ForecastAdapterViewHolder(View view) {
             super(view);
 
-//          TODO (6) Get references to all new views and delete this line
-            weatherSummary = (TextView) view.findViewById(R.id.tv_weather_data);
+//          COMPLETE (6) Get references to all new views and delete this line
+            weatherLow = (TextView) view.findViewById(R.id.tv_weather_low);
+            weatherHigh = (TextView) view.findViewById(R.id.tv_weather_high);
+            weatherDay = (TextView) view.findViewById(R.id.tv_weather_day);
+            weatherForecast = (TextView) view.findViewById(R.id.tv_weather_forecast);
+            weatherIcon = (ImageView) view.findViewById(R.id.iv_weather_icon);
 
             view.setOnClickListener(this);
         }
