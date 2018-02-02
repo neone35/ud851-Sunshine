@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Text that describes weather condition -->
+
+        <!-- High temperature for today -->
+
+        <!-- Low temperature for today -->
+
+        <!-- Humidity  -->
+        <TextView
+            android:id="@+id/humidity"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_humidity_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_humidity_label"
+            tools:text="38%" />
+
+        <!-- Pressure  -->
+        <TextView
+            android:id="@+id/pressure"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/humidity"
+            app:layout_constraintTop_toBottomOf="@+id/humidity"
+            tools:text="995 hPa" />
+
+        <!-- Wind  -->
+        <TextView
+            android:id="@+id/wind"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/pressure"
+            app:layout_constraintTop_toBottomOf="@+id/pressure"
+            tools:text="4km/h NW" />
+
+        <TextView
+            android:id="@+id/tv_humidity_label"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Humidity" />
+
+        <TextView
+            android:id="@+id/tv_pressure_label"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_humidity_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_humidity_label"
+            tools:text="Pressure" />
+
+        <TextView
+            android:id="@+id/tv_wind_label"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_pressure_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pressure_label"
+            tools:text="Wind" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
